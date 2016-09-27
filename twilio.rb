@@ -18,16 +18,36 @@ RestClient.post(
 )
 
 
-RestClient::Request.new(
+response = RestClient::Request.new(
   :method => :post,
   :url => 'https://AC9322063518a8907f71daec9f039363d0:43bd293c6dc9763a43b5715e18777a6d@api.twilio.com/2010-04-01/Accounts/AC9322063518a8907f71daec9f039363d0/Messages.json',
   :user =>'AC9322063518a8907f71daec9f039363d0',
   :password => '43bd293c6dc9763a43b5715e18777a6d',
-  :payload => { :Body => 'Hello World!',
+  :payload => { :Body => 'Hello JSON World!',
                 :To => '5416780529',
                 :From => '5416394132'
   }
 ).execute
+
+class Message
+  def initialize(attributes)
+    @to = attributes['to']
+    @from = attributes['from']
+    @body = attributes['body']
+    @status = attributes['status']
+  end
+end
+
+response = RestClient::Request.new(
+  :method => :get,
+  :url => 'https://AC9322063518a8907f71daec9f039363d0:43bd293c6dc9763a43b5715e18777a6d@api.twilio.com/2010-04-01/Accounts/AC9322063518a8907f71daec9f039363d0/Messages.json',
+  :user =>'AC9322063518a8907f71daec9f039363d0',
+  :password => '43bd293c6dc9763a43b5715e18777a6d'
+).execute
+
+parsed_response = JSON.parse(response)
+messages_data = parsed_response['messages']
+messages = messages_data.map { |data| Message.new(data) }
 
 JSON
 curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/AC9322063518a8907f71daec9f039363d0/Messages.json' \
