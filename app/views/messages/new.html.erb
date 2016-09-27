@@ -1,5 +1,14 @@
 <h2>New Message</h2>
 
+<% if @message.errors.any? %>
+  <p>Something went wrong:</p>
+<ul>
+  <% @message.errors.full_message.each do |message| %>
+  <li><%= message %></li>
+  <% end %>
+</ul>
+<% end %>
+
 <%= form_for @message do |f| %>
   <%= f.label :to %>
   <%= f.text_field :to %>
@@ -7,4 +16,5 @@
   <%= f.text_field :from %>
   <%= f.label :body %>
   <%= f.text_field :body %>
+  <%= f.submit %>
 <% end %>
